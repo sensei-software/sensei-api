@@ -6,6 +6,7 @@
 	include_once(dirname(__FILE__)."/lib/db.php");
 	include_once(dirname(__FILE__)."/lib/functions.php");
 
+
 	function printGraphJSON($data,$header,$type='area',$title){
 					if(!$data) return;
 	        $h="{\n";
@@ -40,6 +41,8 @@
 	$timeTo=gGet("to","");
 	$fillHoles=gGet("fill","1");
 
+	$scale="1";
+
 	if($unit=="m"){
 		$unit="MINUTE";
 		$table="sensors_values_m";
@@ -47,6 +50,14 @@
 		$dateFormat_In="%Y%m%d%H%i";
 		//$dateFormat_Out="%m/%d %H:%i";
 		$dateFormat_Out="%Y/%m/%d %H:%i:%s";
+	} else if ($unit=="m10"){
+                $unit="MINUTE";
+                $scale="1000";
+                $table="sensors_values_m";
+                $calendarTable="calendar_m";
+                $dateFormat_In="%Y%m%d%H%i";
+                //$dateFormat_Out="%m/%d %H:%i:%s";
+                $dateFormat_Out="%Y/%m/%d %H:%i:%s";
 	}else if ($unit=="h"){
 		$unit="HOUR";
 		$table="sensors_values_h";
@@ -54,13 +65,32 @@
 		$dateFormat_In="%Y%m%d%H";
 		//$dateFormat_Out="%m/%d %H:%i";
 		$dateFormat_Out="%Y/%m/%d %H:%i:%s";
-	}else{
+	}else if ($unit=="s"){
 		$unit="SECOND";
 		$table="sensors_values";
 		$calendarTable="calendar_s";
 		$dateFormat_In="%Y%m%d%H%i%s";
 		//$dateFormat_Out="%m/%d %H:%i:%s";
 		$dateFormat_Out="%Y/%m/%d %H:%i:%s";
+	} else if ($unit=="s10"){
+		$unit="SECOND";
+		$scale="10";
+		$table="sensors_values";
+		$calendarTable="calendar_s";
+		$dateFormat_In="%Y%m%d%H%i%s";
+		//$dateFormat_Out="%m/%d %H:%i:%s";
+		$dateFormat_Out="%Y/%m/%d %H:%i:%s";
+	} else if ($unit=="s5"){
+		$unit="SECOND";
+		$scale="5";
+		$table="sensors_values";
+		$calendarTable="calendar_s";
+		$dateFormat_In="%Y%m%d%H%i%s";
+		//$dateFormat_Out="%m/%d %H:%i:%s";
+		$dateFormat_Out="%Y/%m/%d %H:%i:%s";
+	} else {
+		echo "Error no unit specified";
+		exit;
 	}
 
 	if(!$timeFrom){
@@ -112,13 +142,13 @@
 					FORMAT(SensorAvg,1) as  `$sensorLabel`
 				FROM (
 					SELECT
-						DateField,
+						FLOOR(DateField/$scale)*$scale as DateField,
 						AVG(Value) as SensorAvg
 					FROM `$table` as s
-					  WHERE DateField > $timeFrom AND DateField < $timeTo
+						  WHERE DateField >= $timeFrom AND DateField <= $timeTo
 						  AND s.SensorName ='$sensorName' AND s.Measure='$sensorMeasure'
 					GROUP BY
-						DateField
+						FLOOR(s.DateField/$scale)*$scale
 				) as v
 			";
 
@@ -129,7 +159,7 @@
 				";
 			}
 			$sql.="
-					WHERE $dateField > $timeFrom AND $dateField < $timeTo
+					WHERE $dateField >= $timeFrom AND $dateField <= $timeTo
 					ORDER BY $dateField ASC
 			";
 		$data=readTableU($sql);

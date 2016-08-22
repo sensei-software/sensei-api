@@ -17,7 +17,7 @@
 		echo "NO SID";
 		return;
 	}
-	$cmd="$SENSEI_PATH/bin/sensei-cmd \"$cmd\" $sid 2>&1";	
+	$cmd="$SENSEI_PATH/bin/sensei-cmd \"$cmd\" $sid 2>/dev/null";	
 
 	echo shell_exec("$cmd");
 ?>

@@ -13,7 +13,7 @@ if(DEBUG)
 else
   $MYSQL_PASS="";
 
-$SENSEI_PATH = "/home/supaka/Projects/sensei-0.7/sensei-server";
+$SENSEI_PATH = "../../sensei-server";
 
 $SenseiMonitorRefresh = 600;
 $SenseiMonitorLastMinutes ="60&r=60";
