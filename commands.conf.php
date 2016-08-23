@@ -24,9 +24,9 @@ $CMD["LastValues"]="$SENSEI_PATH/bin/sensei-db-values";
 $CMD["SenseiLog"]="tail -n 20 $SENSEI_PATH/logs/sensei.log";
 $CMD["SenseiErrors"]="tail -n 20 $SENSEI_PATH/logs/sensei_errors.log";
 $CMD["MinicronLog"]="grep 'Running command' /var/log/minicron.log | tail -n 40";
-$CMD["SenseiStop"]="$SENSEI_PATH/bin/sensei-kill-all";
-$CMD["SenseiStart"]="$SENSEI_PATH/bin/sensei-daemon -c &";
-$CMD["SenseiRestart"]="$SENSEI_PATH/bin/sensei-kill-all && $SENSEI_PATH/bin/sensei-daemon &";
+$CMD["SenseiStop"]="$SENSEI_PATH/bin/sensei-stop";
+$CMD["SenseiStart"]="$SENSEI_PATH/bin/sensei-start";
+$CMD["SenseiRestart"]="$SENSEI_PATH/bin/sensei-restart";
 $CMD["SenseiDiscover"]="$SENSEI_PATH/bin/sensei-discover";
 $CMD["MinicronRestart"]="sudo minicron server restart";
 ?>
