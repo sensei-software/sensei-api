@@ -1,15 +1,7 @@
 <?php
-$CMD["CronTab"]="
-  cat /etc/crontab
-    | grep -v '^$'
-    | grep sensei-cmd
-    | sed 's/ \//\//g'
-    | sed 's/\([0-9]\) \%22/\1%22/g'
-    | awk '{ print $5 %22/%22 $4 %22/%22 $3 %22 %22 $2 %22:%22 $1 %22 -> %22 $12 %22 %22 $13 %22 %22 $14  }'
-    | sort -k 2 -V
-";
+$CMD["CronTab"]="crontab -l";
 $CMD["SenseiPs"]="$SENSEI_PATH/bin/sensei-ps";
-$CMD["Rules"]="cat $SENSEI_PATH/conf/rules/*.active";
+$CMD["Rules"]="cat $SENSEI_PATH/conf/rules/*.on";
 $CMD["TaskManager"]="top -b -n 1 | head -n 20";
 $CMD["CpuLoad"]="cat /proc/loadavg";
 $CMD["DiskFree"]="df";

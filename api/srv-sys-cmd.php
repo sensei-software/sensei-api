@@ -15,8 +15,11 @@
 	}
 
 	if($path=="sensei"){
-		$cmd="$SENSEI_PATH/bin/$cmd";
+		// $cmd="$SENSEI_PATH/bin/$cmd";
+		$cmd="export PATH='/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:$SENSEI_PATH/bin/';$cmd";
 	}
 
-	echo shell_exec("$cmd");
+	//echo "EXEC: $cmd ";
+	// echo "RESULT";
+	echo shell_exec("$cmd 2>&1");
 ?>
