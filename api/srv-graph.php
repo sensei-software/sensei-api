@@ -32,14 +32,14 @@
 	$sensors= array();
 	$sqls= array();
 	$type=gGet("type","spline");
-	$unit=gGet("unit","m");
+	$unit=gGet("unit","s");
 	$filter=gGet("filter","");
 	$singleGraph=gGet("single","1");
-	$timeLast=gGet("last","60");
+	$timeLast=gGet("last","6");
 
 	$timeFrom=gGet("from","");
 	$timeTo=gGet("to","");
-	$fillHoles=gGet("fill","1");
+	$fillHoles=gGet("fill","0");
 
 	$scale="1";
 

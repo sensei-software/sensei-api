@@ -19,7 +19,8 @@
 		$cmd="export PATH='/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:$SENSEI_PATH/bin/';$cmd";
 	}
 
-	//echo "EXEC: $cmd ";
+	// echo "EXEC: $cmd ";
 	// echo "RESULT";
+	header("cmd: $cmd");
 	echo shell_exec("$cmd 2>&1");
 ?>
