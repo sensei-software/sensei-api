@@ -51,13 +51,13 @@
 		//$dateFormat_Out="%m/%d %H:%i";
 		$dateFormat_Out="%Y/%m/%d %H:%i:%s";
 	} else if ($unit=="m10"){
-                $unit="MINUTE";
-                $scale="1000";
-                $table="sensors_values_m";
-                $calendarTable="calendar_m";
-                $dateFormat_In="%Y%m%d%H%i";
-                //$dateFormat_Out="%m/%d %H:%i:%s";
-                $dateFormat_Out="%Y/%m/%d %H:%i:%s";
+    $unit="MINUTE";
+    $scale="1000";
+    $table="sensors_values_m";
+    $calendarTable="calendar_m";
+    $dateFormat_In="%Y%m%d%H%i";
+    //$dateFormat_Out="%m/%d %H:%i:%s";
+    $dateFormat_Out="%Y/%m/%d %H:%i:%s";
 	}else if ($unit=="h"){
 		$unit="HOUR";
 		$table="sensors_values_h";
@@ -100,15 +100,30 @@
 		$timeTo = "( NOW() +0 )";
 	}
 
+	$multipliers=Array();
 	// Filter parsing
 	$filter=str_replace(" ","%",$filter);
 	if(strpos($filter,",")){
 		$filters=explode(",",$filter);
 		foreach($filters as $f){
+			if(strpos($f,"*")){
+				// echo "found multiplier $mult for $f";
+				$mult=split("\*",$f)[1];
+				$f=split("\*",$f)[0];
+				$multipliers[$f]=$mult;
+			}
 			$filterRules[] = "CONCAT(SensorName,':',Measure) LIKE '%$f%'";
 		}
 		$filterRule=implode(" OR ",$filterRules);
 	} else {
+		if(strpos($filter,"*")){
+			$mult=split("\*",$filter)[1];
+			$filter=split("\*",$filter)[0];
+			$multipliers[$filter]=$mult;
+			// echo "found multiplier $mult for $filter";
+		} else {
+			// echo "NOT found multiplier $mult for $filter";
+		}
 		$filterRule="CONCAT(SensorName,':',Measure) LIKE '%$filter%'";
 	}
 
@@ -116,7 +131,7 @@
 		DateField > $timeFrom AND DateField < $timeTo
 		AND ($filterRule) ORDER BY SensorName,Measure ";
 
-	$sensors=readTable($sql);
+	$sensors=readTableU($sql);
 
 	if(!count($sensors)){
 		echo "[{\"series\": []}]";
@@ -130,8 +145,17 @@
 			$sensorUnit=$sensor["Unit"];
 			$sensorLabel="($sensorName) - $sensorMeasure - {$sensorUnit}";
 			$sensorsLabels[]=$sensorLabel;
+/*
+			foreach($multipliers AS $key=>$mult){
+				// $key=array_keys($mult)[0];
+				echo "check $key multiplier of $mult\n";
+				if(strpos(strtoupper($sensorLabel),strtoupper($key))){
+					echo "$sensorLabel has multiplier: ".$mult."\n\n";
+				}else{
 
-
+				}
+			}
+*/
 			if($fillHoles)
 					$dateField ="c.datefield";
 			else
@@ -163,6 +187,22 @@
 					ORDER BY $dateField ASC
 			";
 		$data=readTableU($sql);
+
+		foreach($data as &$row){
+			foreach($multipliers AS $key=>$mult){
+				// echo "$sensorLabel\n\n";
+				$pattern="/$key/i";
+				$pattern=str_replace("%",".*",$pattern);
+				// echo "$key - $pattern\n";
+				if(preg_match($pattern,$sensorLabel)){
+					// echo "$sensorLabel has multiplier: ".$mult."\n\n";
+					$row[1]*=$mult;
+				}else{
+
+				}
+			}
+		}
+
 		if (count($data))
 			$graphs[]=printGraphJSON($data, $sensorLabel,"$type","$sensorLabel");
 	}
