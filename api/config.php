@@ -1,6 +1,5 @@
 <?php
 // If DEBUG mode is ON:
-// - TOR is disabled
 // - DB password change
 define("DEBUG", 0);
 
@@ -11,7 +10,7 @@ $MYSQL_USR= "sensei";
 if(DEBUG)
   $MYSQL_PASS="";
 else
-  $MYSQL_PASS="";
+  $MYSQL_PASS="senseimonitor777";
 
 $SENSEI_PATH = "/home/sensei/sensei/sensei-server";
 
