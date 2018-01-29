@@ -108,8 +108,8 @@
 		foreach($filters as $f){
 			if(strpos($f,"*")){
 				// echo "found multiplier $mult for $f";
-				$mult=split("\*",$f)[1];
-				$f=split("\*",$f)[0];
+				$mult=explode("*",$f)[1];
+				$f=explode("*",$f)[0];
 				$multipliers[$f]=$mult;
 			}
 			$filterRules[] = "CONCAT(SensorName,':',Measure) LIKE '%$f%'";
@@ -117,8 +117,8 @@
 		$filterRule=implode(" OR ",$filterRules);
 	} else {
 		if(strpos($filter,"*")){
-			$mult=split("\*",$filter)[1];
-			$filter=split("\*",$filter)[0];
+			$mult=explode("*",$filter)[1];
+			$filter=explode("*",$filter)[0];
 			$multipliers[$filter]=$mult;
 			// echo "found multiplier $mult for $filter";
 		} else {

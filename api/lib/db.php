@@ -63,7 +63,7 @@ function readTable($sql,  $mysql_host=null, $mysql_db=null, $mysql_user=null, $m
 	$i=0;
         $result=myQuery($sql, $mysql_host, $mysql_db, $mysql_user, $mysql_pass);
         if($result) {
-                while($row=mysqli_fetch_array($result, MYSQL_BOTH)){
+                while($row=mysqli_fetch_array($result, MYSQLI_BOTH)){
                         $data[$i]=$row;
                         $i++;
                 }
@@ -77,7 +77,7 @@ function readTableU($sql,  $mysql_host=null, $mysql_db=null, $mysql_user=null, $
 	$i=0;
         $result=myQueryU($sql, $mysql_host, $mysql_db, $mysql_user, $mysql_pass);
         if($result) {
-                while($row=mysqli_fetch_array($result, MYSQL_BOTH)){
+                while($row=mysqli_fetch_array($result, MYSQLI_BOTH)){
                         $data[$i]=$row;
                         $i++;
                 }
